@@ -34,7 +34,25 @@ public class Server {
                     case "memory":
                     	break;
                     case "netstat":
-                    	break;
+                        try {
+                        String line;
+                        String netstat = "";
+                        Runtime rt = Runtime.getRuntime();
+                        Process pr = rt.exec("ps");
+                        
+                        BufferedReader input = new BufferedReader(new InputStreamReader(pr.getInputStream()));
+                        while((line=input.readLine()) != null) {
+                            System.out.println(line);
+                            netstat += line + "\n";
+                        }
+                       System.out.print(netstat);
+                       outputStr += netstat;
+                       input.close();
+                        } catch(Exception err){
+                            err.printStackTrace();
+                        }
+                       
+                        break;
                     case "users":
                     	break;
                     case "processes":
