@@ -38,6 +38,22 @@ public class Server {
                     case "users":
                     	break;
                     case "processes":
+                        try{
+                            String line;
+                            String processes = "";
+                            Process p = Runtime.getRuntime().exec("jps");
+                            BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                            while((line = input.readLine()) != null){
+                                System.out.println(line);
+                                processes += line + "\n";
+                            }
+                            System.out.print(processes);
+                            outputStr += processes;
+                            input.close();
+                        }catch(Exception err){
+                            err.printStackTrace();
+                        }
+                        
                     	break;
                     case "close":
                     	clientSocket.close();
