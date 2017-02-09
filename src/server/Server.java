@@ -11,6 +11,7 @@ public class Server {
         try (
         	// Creates socket
             ServerSocket serverSocket = new ServerSocket(portNumber);
+        	
             Socket clientSocket = serverSocket.accept();     
         		
         	// Prints to socket
@@ -26,10 +27,24 @@ public class Server {
                     //add api cases here
                     case "date": 
                         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-                        outputStr = outputStr + dateFormat.format(new Date());
+                        outputStr += dateFormat.format(new Date());
                         break;
+                    case "uptime":
+                    	break;
+                    case "memory":
+                    	break;
+                    case "netstat":
+                    	break;
+                    case "users":
+                    	break;
+                    case "processes":
+                    	break;
+                    case "close":
+                    	clientSocket.close();
+                    	outputStr += "Closed socket";
+                    	break;
                     default:
-                        out.println("Error: not a valid input");
+                        outputStr += "Error: not a valid input";
                         break;
                 }
                 //appends 'end' to mark end of transmission
