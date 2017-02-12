@@ -34,17 +34,19 @@ public class Client {
             
             // Reads and prints all lines in server response
             String serverRes;
-            while ((serverRes = in.readLine()).length() > 0) {
+            while ((serverRes = in.readLine()) != "end" && serverRes != null) {
                 System.out.println(serverRes);
                 if (serverRes.equals("end")){
                     break;
                 } else {
-                    System.out.println(serverRes);
                     sb.append(serverRes + "\n");
+                }
+                if(new Date().getTime() - start.getTime() > 5000) {
+                    return "Server timeout";
                 }
             }
             Date end = new Date();
-            sb.append((end.getTime() - start.getTime()) + "ms");
+            sb.append("Response time:" + (end.getTime() - start.getTime()) + "ms");
             userInput = null;
         }
         return sb.toString();

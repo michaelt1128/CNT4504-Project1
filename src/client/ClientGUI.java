@@ -16,13 +16,14 @@ import java.awt.event.*;
 public class ClientGUI extends javax.swing.JFrame {
 
     public Client client;
-
+    public boolean serverConnection = false;
     /**
      * Creates new form ClientGUI
      */
     public ClientGUI() {
         initComponents();
         initListeners();
+        System.out.println(serverConnection);
     }
 
     /**
@@ -206,33 +207,60 @@ public class ClientGUI extends javax.swing.JFrame {
             try {
                 switch (command) {
                     case "Connect":
+                        System.out.println("connecting to server");
+                        
                         client = new Client("127.0.0.1", 5012);
+                        
+                        connectButton.setText("Disconnect");
+                                                
+                        dateButton.setEnabled(true);
+                        uptimeButton.setEnabled(true);
+                        memoryButton.setEnabled(true);
+                        netstatButton.setEnabled(true);
+                        curuserButton.setEnabled(true);
+                        processesButton.setEnabled(true);
+                        quitButton.setEnabled(true);
+                        break;
+                    case "Disconnect":
+                        System.out.println("disconnecting");
+                        if(client == null) {
+                            System.out.println("null");
+                        } else {
+                            System.out.println("not null");
+                        }
+                        jTextArea1.setText(client.userInput("close"));
+                        
+                        connectButton.setText("Connect");
+                    
+                        dateButton.setEnabled(false);
+                        uptimeButton.setEnabled(false);
+                        memoryButton.setEnabled(false);
+                        netstatButton.setEnabled(false);
+                        curuserButton.setEnabled(false);
+                        processesButton.setEnabled(false);
+                        quitButton.setEnabled(false);
                         break;
                     case "Date":
                         jTextArea1.setText(client.userInput("date"));
                         break;
                     case "Uptime":
+                        jTextArea1.setText(client.userInput("uptime"));
                         break;
                     case "Memory Use":
+                        jTextArea1.setText(client.userInput("memory"));
                         break;
                     case "Netstat":
+                        jTextArea1.setText(client.userInput("netstat"));
                         break;
                     case "Current Users":
+                        jTextArea1.setText(client.userInput("users"));
                         break;
                     case "Running Processes":
+                        jTextArea1.setText(client.userInput("processes"));
                         break;
                     case "Quit":
                         System.exit(0);
                         break;
-                }
-                if(command == "Connect" && client.connected){
-                    dateButton.setEnabled(true);
-                    uptimeButton.setEnabled(true);
-                    memoryButton.setEnabled(true);
-                    netstatButton.setEnabled(true);
-                    curuserButton.setEnabled(true);
-                    processesButton.setEnabled(true);
-                    quitButton.setEnabled(true);
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();

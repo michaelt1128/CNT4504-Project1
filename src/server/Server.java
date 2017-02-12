@@ -4,89 +4,63 @@ import java.net.*;
 import java.io.*;
 import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.text.NumberFormat;
+import java.lang.StringBuilder;
 
 public class Server {
 	public static void main(String[] args) throws IOException {
 
-		System.out.println("Connecting to server");
-
+		System.out.println("Starting server");
+		Date startTime = new Date();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		SimpleDateFormat timeDifFormat = new SimpleDateFormat("mm:ss;SSS");
 		boolean connect = true;
+
 		while (connect) {
 			int portNumber = 5012;
 			try (
 					// Creates socket
 					ServerSocket serverSocket = new ServerSocket(portNumber);
-
 					Socket clientSocket = serverSocket.accept();
-
 					// Prints to socket
 					PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-
 					// Receives from socket
 					BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 			) {
 				String inputLine;
 				while ((inputLine = in.readLine()) != null) {
-					String outputStr = "Received string: " + inputLine + "\n";
+					
+					StringBuilder outputStr = new StringBuilder("Received string: " + inputLine + "\n");
+
 					switch (inputLine) {
 						// add api cases here
 						case "date":
-							SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-							outputStr += dateFormat.format(new Date());
+							outputStr.append(dateFormat.format(new Date()));
 							break;
 						case "uptime":
+							outputStr.append(timeDifFormat.format(new Date().getTime() - startTime.getTime()) + " uptime");
 							break;
 						case "memory":
+							outputStr.append(memoryUsage());
 							break;
 						case "netstat":
-							try {
-								String line;
-								String netstat = "";
-								Runtime rt = Runtime.getRuntime();
-								Process pr = rt.exec("ps");
-
-								BufferedReader input = new BufferedReader(new InputStreamReader(pr.getInputStream()));
-								while ((line = input.readLine()) != null) {
-									System.out.println(line);
-									netstat += line + "\n";
-								}
-								System.out.print(netstat);
-								outputStr += netstat;
-								input.close();
-							} catch (Exception err) {
-								err.printStackTrace();
-							}
-
+							outputStr.append(runCommand("netstat -n"));
 							break;
 						case "users":
 							break;
 						case "processes":
-							try {
-								String line;
-								String processes = "";
-								Process p = Runtime.getRuntime().exec("jps");
-								BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
-								while ((line = input.readLine()) != null) {
-									System.out.println(line);
-									processes += line + "\n";
-								}
-								System.out.print(processes);
-								outputStr += processes;
-								input.close();
-							} catch (Exception err) {
-								err.printStackTrace();
-							}
+							outputStr.append(runCommand("jps"));
 							break;
 						case "close":
 							clientSocket.close();
-							outputStr += "Closed socket";
+							outputStr.append("Closed socket");
 							break;
 						default:
-							outputStr += "Error: not a valid input";
+							outputStr.append("Error: not a valid input");
 							break;
 					}
 					// appends 'end' to mark end of transmission
-					out.println(outputStr + "\nend");
+					out.println(outputStr.append("\nend").toString());
 				}
 			} catch (IOException e) {
 				System.out.println("Exception caught when trying to listen on port " + portNumber
@@ -95,5 +69,44 @@ public class Server {
 			}
 
 		}
+	}
+
+	private static String runCommand(String command) {
+		try {
+			String line;
+			String cmdOutput = "";
+			Runtime rt = Runtime.getRuntime();
+			Process pr = rt.exec(command);
+
+			BufferedReader input = new BufferedReader(new InputStreamReader(pr.getInputStream()));
+			while ((line = input.readLine()) != null) {
+				System.out.println(line);
+				cmdOutput += line + "\n";
+			}
+			System.out.print(cmdOutput);
+			
+			input.close();
+			return cmdOutput;
+		} catch (Exception err) {
+			err.printStackTrace();
+         return err.toString();
+		}
+	}
+
+	private static String memoryUsage() {
+		Runtime runtime = Runtime.getRuntime();
+
+		NumberFormat format = NumberFormat.getInstance();
+
+		StringBuilder sb = new StringBuilder();
+		long maxMemory = runtime.maxMemory();
+		long allocatedMemory = runtime.totalMemory();
+		long freeMemory = runtime.freeMemory();
+
+		sb.append("free memory: " + format.format(freeMemory / 1024) + "\n");
+		sb.append("allocated memory: " + format.format(allocatedMemory / 1024) + "\n");
+		sb.append("max memory: " + format.format(maxMemory / 1024) + "\n");
+		sb.append("total free memory: " + format.format((freeMemory + (maxMemory - allocatedMemory)) / 1024) + "\n");
+		return sb.toString();
 	}
 }
