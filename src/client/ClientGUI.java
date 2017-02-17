@@ -17,6 +17,9 @@ public class ClientGUI extends javax.swing.JFrame {
 
     public Client client;
     public boolean serverConnection = false;
+    private final string IP_ADDRESS = "127.0.0.1";
+    private final int PORT = 5012;
+
     /**
      * Creates new form ClientGUI
      */
@@ -209,7 +212,7 @@ public class ClientGUI extends javax.swing.JFrame {
                     case "Connect":
                         System.out.println("connecting to server");
                         
-                        client = new Client("127.0.0.1", 5012);
+                        client = new Client(IP_ADDRESS, PORT);
                         
                         connectButton.setText("Disconnect");
                                                 
@@ -267,6 +270,19 @@ public class ClientGUI extends javax.swing.JFrame {
             }
         }
     }
+
+    public int runManyClients(int amount) {
+        if (client != null) {
+            client.userInput("close");
+        }
+        Date start = new Date();
+        for(int i = 0; i < amount; i++) {
+            client = new Client(IP_ADDRESS, PORT);
+            client.userInput("netstat");
+        }
+        return new Date().getTime() - start.getTime;
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton connectButton;
     private javax.swing.JButton curuserButton;
