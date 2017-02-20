@@ -8,6 +8,7 @@ package client;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.lang.StringBuilder;
 
 /**
  *
@@ -17,8 +18,10 @@ public class ClientGUI extends javax.swing.JFrame {
 
     public Client client;
     public boolean serverConnection = false;
-    private final string IP_ADDRESS = "127.0.0.1";
+    private final String IP_ADDRESS = "127.0.0.1";
     private final int PORT = 5012;
+    private Client[] clients;
+    private StringBuilder sb = new StringBuilder();
 
     /**
      * Creates new form ClientGUI
@@ -38,6 +41,7 @@ public class ClientGUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jDialog1 = new javax.swing.JDialog();
         dateButton = new javax.swing.JButton();
         uptimeButton = new javax.swing.JButton();
         memoryButton = new javax.swing.JButton();
@@ -49,9 +53,24 @@ public class ClientGUI extends javax.swing.JFrame {
         jTextArea1 = new javax.swing.JTextArea();
         connectButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        numClients = new javax.swing.JSpinner();
+        jLabel2 = new javax.swing.JLabel();
+        moreInfoBut = new javax.swing.JButton();
+
+        javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
+        jDialog1.getContentPane().setLayout(jDialog1Layout);
+        jDialog1Layout.setHorizontalGroup(
+            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        jDialog1Layout.setVerticalGroup(
+            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CNT4504 Project 1");
+        setResizable(false);
 
         dateButton.setText("Date");
 
@@ -80,43 +99,63 @@ public class ClientGUI extends javax.swing.JFrame {
 
         jLabel1.setText("Server Response:");
 
+        numClients.setValue(1);
+
+        jLabel2.setText("Num. of Clients:");
+
+        moreInfoBut.setText("View Info");
+        moreInfoBut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                moreInfoButActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(connectButton, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(218, 218, 218))
             .addGroup(layout.createSequentialGroup()
-                .addGap(34, 34, 34)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(quitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(processesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(dateButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(memoryButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(curuserButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
-                                .addComponent(netstatButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(uptimeButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGap(29, 29, 29)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(processesButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(dateButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(memoryButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(curuserButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(netstatButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(uptimeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 501, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel1)))))
-                .addContainerGap(31, Short.MAX_VALUE))
+                                .addComponent(moreInfoBut, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(28, 28, 28)
+                                    .addComponent(quitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 642, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(153, 153, 153)
+                        .addComponent(jLabel1)))
+                .addContainerGap(20, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(numClients, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(connectButton, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(211, 211, 211))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(dateButton)
-                            .addComponent(jLabel1))
-                        .addGap(26, 26, 26)
+                        .addComponent(dateButton)
+                        .addGap(18, 18, 18)
                         .addComponent(uptimeButton)
                         .addGap(18, 18, 18)
                         .addComponent(memoryButton)
@@ -125,14 +164,17 @@ public class ClientGUI extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(curuserButton)
                         .addGap(18, 18, 18)
-                        .addComponent(processesButton))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(41, 41, 41)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(processesButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(moreInfoBut)
                         .addGap(18, 18, 18)
-                        .addComponent(connectButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(quitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(quitButton))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(7, 7, 7)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(connectButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(numClients, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -142,6 +184,14 @@ public class ClientGUI extends javax.swing.JFrame {
     private void connectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_connectButtonActionPerformed
+
+    private void moreInfoButActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moreInfoButActionPerformed
+        JOptionPane.showMessageDialog(this, 
+                "      Created by:\nLiam Clarke\nKaleb LaBarrie\nTrang Nguyen\nWilliam Mejia\nMichael Turner\nMathew Waroff", 
+                "CNT4504 Project1 - Team 4",
+                JOptionPane.PLAIN_MESSAGE);
+        //Created by:\nLiam Clarke\nKaleb LaBarrie\nTrang Nguyen\nWilliam Mejia\nMichael Turner\nMathew Waroff
+    }//GEN-LAST:event_moreInfoButActionPerformed
 
     /**
      * @param args the command line arguments
@@ -177,20 +227,23 @@ public class ClientGUI extends javax.swing.JFrame {
             }
         });
     }
-
+    
+    private void controlButtons(boolean status){
+        dateButton.setEnabled(status);
+        uptimeButton.setEnabled(status);
+        memoryButton.setEnabled(status);
+        netstatButton.setEnabled(status);
+        curuserButton.setEnabled(status);
+        processesButton.setEnabled(status);
+        
+    }
     public void initListeners() {
         this.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent windowEvent) {
                 System.exit(0);
             }
         });
-        dateButton.setEnabled(false);
-        uptimeButton.setEnabled(false);
-        memoryButton.setEnabled(false);
-        netstatButton.setEnabled(false);
-        curuserButton.setEnabled(false);
-        processesButton.setEnabled(false);
-        quitButton.setEnabled(false);
+        controlButtons(false);
         
         dateButton.addActionListener(new ButtonClickListener());
         uptimeButton.addActionListener(new ButtonClickListener());
@@ -203,63 +256,54 @@ public class ClientGUI extends javax.swing.JFrame {
     }
 
     private class ButtonClickListener implements ActionListener {
-
         public void actionPerformed(ActionEvent e){
             String command = e.getActionCommand();
-            String response;
             try {
                 switch (command) {
                     case "Connect":
                         System.out.println("connecting to server");
-                        
-                        client = new Client(IP_ADDRESS, PORT);
-                        
+                        runManyClients();
+                        numClients.setEnabled(false);
                         connectButton.setText("Disconnect");
-                                                
-                        dateButton.setEnabled(true);
-                        uptimeButton.setEnabled(true);
-                        memoryButton.setEnabled(true);
-                        netstatButton.setEnabled(true);
-                        curuserButton.setEnabled(true);
-                        processesButton.setEnabled(true);
-                        quitButton.setEnabled(true);
+                        controlButtons(true);
                         break;
                     case "Disconnect":
                         System.out.println("disconnecting");
-                        if(client == null) {
-                            System.out.println("null");
-                        } else {
-                            System.out.println("not null");
-                        }
-                        jTextArea1.setText(client.userInput("close"));
-                        
+                        jTextArea1.setText("Disconnected");
+                        closeClients();
+                        numClients.setEnabled(true);
                         connectButton.setText("Connect");
-                    
-                        dateButton.setEnabled(false);
-                        uptimeButton.setEnabled(false);
-                        memoryButton.setEnabled(false);
-                        netstatButton.setEnabled(false);
-                        curuserButton.setEnabled(false);
-                        processesButton.setEnabled(false);
-                        quitButton.setEnabled(false);
+                        controlButtons(false);
                         break;
                     case "Date":
-                        jTextArea1.setText(client.userInput("date"));
+                        sb.setLength(0);
+                        runManyCommands("date");
+                        jTextArea1.setText(sb.toString());
                         break;
                     case "Uptime":
-                        jTextArea1.setText(client.userInput("uptime"));
+                        sb.setLength(0);
+                        runManyCommands("uptime");
+                        jTextArea1.setText(sb.toString());
                         break;
                     case "Memory Use":
-                        jTextArea1.setText(client.userInput("memory"));
+                        sb.setLength(0);
+                        runManyCommands("memory");
+                        jTextArea1.setText(sb.toString());
                         break;
                     case "Netstat":
-                        jTextArea1.setText(client.userInput("netstat"));
+                        sb.setLength(0);
+                        runManyCommands("netstat");
+                        jTextArea1.setText(sb.toString());
                         break;
                     case "Current Users":
-                        jTextArea1.setText(client.userInput("users"));
+                        sb.setLength(0);
+                        runManyCommands("users");
+                        jTextArea1.setText(sb.toString());
                         break;
                     case "Running Processes":
-                        jTextArea1.setText(client.userInput("processes"));
+                        sb.setLength(0);
+                        runManyCommands("processes");
+                        jTextArea1.setText(sb.toString());
                         break;
                     case "Quit":
                         System.exit(0);
@@ -271,27 +315,52 @@ public class ClientGUI extends javax.swing.JFrame {
         }
     }
 
-    public int runManyClients(int amount) {
-        if (client != null) {
-            client.userInput("close");
+    public void runManyClients() {
+        int num = (Integer) numClients.getValue();
+        clients = new Client[num];
+        try{
+            if (client != null) {
+                client.userInput("close");
+            }
+            for(int i = 0; i < num; i++) {
+                clients[i] = new Client(IP_ADDRESS, PORT);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
         }
-        Date start = new Date();
-        for(int i = 0; i < amount; i++) {
-            client = new Client(IP_ADDRESS, PORT);
-            client.userInput("netstat");
+    }
+    public void runManyCommands(String command){
+        try{
+            for(Client client : clients){
+                sb.append(client.userInput(command) + "\n\n");
+            }
+        }catch(Exception ex){
+            ex.printStackTrace();
         }
-        return new Date().getTime() - start.getTime;
+    }
+    private void closeClients(){
+        try{
+            for(Client c : clients){
+                c.userInput("close");
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton connectButton;
     private javax.swing.JButton curuserButton;
     private javax.swing.JButton dateButton;
+    private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JButton memoryButton;
+    private javax.swing.JButton moreInfoBut;
     private javax.swing.JButton netstatButton;
+    private javax.swing.JSpinner numClients;
     private javax.swing.JButton processesButton;
     private javax.swing.JButton quitButton;
     private javax.swing.JButton uptimeButton;

@@ -47,9 +47,10 @@ public class Server {
 							outputStr.append(runCommand("netstat -n"));
 							break;
 						case "users":
+                                                        outputStr.append(runCommand("who"));
 							break;
 						case "processes":
-							outputStr.append(runCommand("jps"));
+							outputStr.append(runCommand("ps -aux"));
 							break;
 						case "close":
 							clientSocket.close();
