@@ -1,58 +1,76 @@
 package client;
-
-import java.io.*;
-import java.net.*;
-import java.util.Date;
-import java.awt.*;
-import javax.swing.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.lang.StringBuilder;
 
-public class Client {
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 
+/**
+ *
+ * @author LiamClarke
+ */
+ public class Client extends Thread {
+     StringBuilder sb = new StringBuilder();
+    
     private Socket serverSocket;
     private PrintWriter out;
     private BufferedReader in;
     private BufferedReader stdIn;
     public String serverResponse;
     public boolean connected;
-    private String hostName;
-    private int portNumber;
-
-    public Client(String hostname, int port) {
+    private String hostName = "127.0.0.1";
+    private int portNumber = 5012;
+    private String command;
+    public Client(){
+    }
+    public Client(String command){
+        this.command = command;
+        System.out.println(this + " " + command);
+        start();
+    }
+    /*public Client(String hostname, int port) {
         hostName = hostname;
         portNumber = port;
+        //connect();
+    }*/
+    
+    @Override
+    public void run(){
+        
         connect();
-    }
-
-    public String userInput(String userInput) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        while (userInput != null) {
-            // Print user input to socket
-            Date start = new Date();
-            System.out.println("Server response:");
-            out.println(userInput);
-            
+        System.out.println("HERE");
+        out.println(command);
+        try{
             // Reads and prints all lines in server response
             String serverRes;
             while ((serverRes = in.readLine()) != "end" && serverRes != null) {
-                System.out.println(serverRes);
+                
                 if (serverRes.equals("end")){
                     break;
                 } else {
                     sb.append(serverRes + "\n");
                 }
-                if(new Date().getTime() - start.getTime() > 5000) {
-                    return "Server timeout";
-                }
+                /*if(new Date().getTime() - start.getTime() > 5000) {
+                    System.out.println("Server timeout");
+                    System.exit(1);
+                }*/
             }
-            Date end = new Date();
-            sb.append("Response time:" + (end.getTime() - start.getTime()) + "ms");
-            userInput = null;
+            System.out.printf(sb.toString());
+        }catch(IOException ex){
+            ex.printStackTrace();
         }
-        return sb.toString();
+        out.println("close");
     }
-
-    public void connect() {
+    
+   public void connect() {
         try {
                 serverSocket = new Socket(hostName, portNumber);
                 // out : message sent to server
@@ -60,7 +78,7 @@ public class Client {
                 //in : message received from server
                 in = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
                 //stdIn : user's message typed in console
-                stdIn = new BufferedReader(new InputStreamReader(System.in));
+                
                 connected = true;
         }
         catch (UnknownHostException e) {
