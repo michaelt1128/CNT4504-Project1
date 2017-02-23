@@ -29,12 +29,11 @@ import java.lang.StringBuilder;
     private String hostName = "127.0.0.1";
     private int portNumber = 5012;
     private String command;
+    
     public Client(){
     }
     public Client(String command){
         this.command = command;
-        System.out.println(this + " " + command);
-        start();
     }
     /*public Client(String hostname, int port) {
         hostName = hostname;
@@ -44,16 +43,16 @@ import java.lang.StringBuilder;
     
     @Override
     public void run(){
-        
-        connect();
-        System.out.println("HERE");
-        out.println(command);
         try{
+            connect();
+            out.println(command);
             // Reads and prints all lines in server response
             String serverRes;
-            while ((serverRes = in.readLine()) != "end" && serverRes != null) {
-                
+            
+            System.out.println(this.getName());
+            while ((serverRes = in.readLine()) != null) {
                 if (serverRes.equals("end")){
+                    out.println("close");
                     break;
                 } else {
                     sb.append(serverRes + "\n");
@@ -64,14 +63,14 @@ import java.lang.StringBuilder;
                 }*/
             }
             System.out.printf(sb.toString());
-        }catch(IOException ex){
+        }catch(Exception ex){
             ex.printStackTrace();
         }
-        out.println("close");
     }
     
    public void connect() {
         try {
+                
                 serverSocket = new Socket(hostName, portNumber);
                 // out : message sent to server
                 out = new PrintWriter(serverSocket.getOutputStream(), true);
