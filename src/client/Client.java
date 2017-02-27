@@ -6,18 +6,9 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.lang.StringBuilder;
+import java.util.Date;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author LiamClarke
- */
- public class Client extends Thread {
+public class Client extends Thread {
      StringBuilder sb = new StringBuilder();
     
     private Socket serverSocket;
@@ -29,7 +20,8 @@ import java.lang.StringBuilder;
     private String hostName = "127.0.0.1";
     private int portNumber = 5012;
     private String command;
-    
+    private long responseTime;
+
     public Client(){
     }
     public Client(String command){
@@ -45,22 +37,20 @@ import java.lang.StringBuilder;
     public void run(){
         try{
             connect();
+            Date start = new Date();
             out.println(command);
             // Reads and prints all lines in server response
             String serverRes;
             
             System.out.println(this.getName());
             while ((serverRes = in.readLine()) != null) {
+                responseTime = new Date().getTime() - start.getTime();
                 if (serverRes.equals("end")){
-                    out.println("close");
                     break;
                 } else {
                     sb.append(serverRes + "\n");
                 }
-                /*if(new Date().getTime() - start.getTime() > 5000) {
-                    System.out.println("Server timeout");
-                    System.exit(1);
-                }*/
+                
             }
             System.out.printf(sb.toString());
         }catch(Exception ex){
@@ -68,7 +58,11 @@ import java.lang.StringBuilder;
         }
     }
     
-   public void connect() {
+    public long getResponseTime() {
+        return responseTime;
+    }
+
+    public void connect() {
         try {
                 
                 serverSocket = new Socket(hostName, portNumber);

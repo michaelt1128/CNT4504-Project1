@@ -12,11 +12,13 @@ public class Server {
 
 		System.out.println("Starting server");
 		Date startTime = new Date();
+		System.out.println(startTime.getTime());
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		SimpleDateFormat timeDifFormat = new SimpleDateFormat("mm:ss;SSS");
 		boolean connect = true;
 
 		while (connect) {
+			System.out.println("trying to connect");
 			int portNumber = 5012;
 			try (
 					// Creates socket
@@ -27,6 +29,7 @@ public class Server {
 					// Receives from socket
 					BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 			) {
+				System.out.println("connected to client");
 				String inputLine;
 				while ((inputLine = in.readLine()) != null) {
 					
@@ -47,7 +50,7 @@ public class Server {
 							outputStr.append(runCommand("netstat -n"));
 							break;
 						case "users":
-                                                        outputStr.append(runCommand("who"));
+                            outputStr.append(runCommand("who"));
 							break;
 						case "processes":
 							outputStr.append(runCommand("ps -aux"));
@@ -62,6 +65,8 @@ public class Server {
 					}
 					// appends 'end' to mark end of transmission
 					out.println(outputStr.append("\nend").toString());
+					clientSocket.close();
+					break;
 				}
 			} catch (IOException e) {
 				System.out.println("Exception caught when trying to listen on port " + portNumber

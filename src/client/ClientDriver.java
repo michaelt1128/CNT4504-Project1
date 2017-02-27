@@ -15,9 +15,11 @@ class ClientFunc {
 
     private int numClients;
     private Thread[] clients;
+    private int responseTime;
 
     public ClientFunc() throws InterruptedException {
         setNumClients();
+
         while (true) {
             switch (printMenu()) {
                 case 1:
@@ -55,8 +57,9 @@ class ClientFunc {
         System.out.println("How many clients do you want to run?");
         numClients = input.nextInt();
     }
-    public int printMenu() {
 
+    public int printMenu() {
+        responseTime = 0;
         System.out.printf("Enter number corresponding to the command:"
                 + "\n1.Date\n2.Uptime\n3.Memory\n4.Netstat\n5.Users\n6.Processes\n99.Change Number of Clients\n0.Exit\n");
         Scanner input = new Scanner(System.in);
@@ -67,14 +70,14 @@ class ClientFunc {
     public void initThreads(int numClients, String command) {
         try {
             clients = new Thread[numClients];
-            long start = System.currentTimeMillis();
             for (int i = 0; i < numClients; i++) {
-                clients[i] = new Thread(new Client(command), "thread" + i);
+                Client client = null;
+                clients[i] = new Thread(client = new Client(command), "thread" + i);
                 clients[i].start();
                 clients[i].join();
+                responseTime += client.getResponseTime();
             }
-            long duration = System.currentTimeMillis() - start;
-            System.out.printf("==== Total Duration: %d ms ====\n\n", duration);
+            System.out.printf("==== Total Duration: %d ms ====\n\n", responseTime);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -94,33 +97,4 @@ public class ClientDriver {
         }
 
     }
-
-    /*public String userInput(String userInput) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        while (userInput != null) {
-            // Print user input to socket
-            Date start = new Date();
-            System.out.println("Server response:");
-            out.println(userInput);
-            
-            // Reads and prints all lines in server response
-            String serverRes;
-            while ((serverRes = in.readLine()) != "end" && serverRes != null) {
-                System.out.println(serverRes);
-                if (serverRes.equals("end")){
-                    break;
-                } else {
-                    sb.append(serverRes + "\n");
-                }
-                if(new Date().getTime() - start.getTime() > 5000) {
-                    return "Server timeout";
-                }
-            }
-            Date end = new Date();
-            sb.append("Response time:" + (end.getTime() - start.getTime()) + "ms");
-            userInput = null;
-        }
-        return sb.toString();
-    }
-     */
 }
