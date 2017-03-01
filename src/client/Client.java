@@ -17,10 +17,10 @@ public class Client extends Thread {
     private BufferedReader stdIn;
     public String serverResponse;
     public boolean connected;
-    private String hostName = "127.0.0.1";
+    private String hostName = "192.168.100.103";
     private int portNumber = 5012;
     private String command;
-    private long responseTime;
+    private double responseTime;
 
     public Client(){
     }
@@ -37,28 +37,29 @@ public class Client extends Thread {
     public void run(){
         try{
             connect();
-            Date start = new Date();
+            double start = (double)System.nanoTime();
             out.println(command);
             // Reads and prints all lines in server response
             String serverRes;
             
             System.out.println(this.getName());
             while ((serverRes = in.readLine()) != null) {
-                responseTime = new Date().getTime() - start.getTime();
                 if (serverRes.equals("end")){
+                	responseTime = (double)System.nanoTime() - start;
                     break;
                 } else {
                     sb.append(serverRes + "\n");
                 }
                 
             }
-            System.out.printf(sb.toString());
+	System.out.printf("Run Time: %f", responseTime);
+            //System.out.printf(sb.toString());
         }catch(Exception ex){
             ex.printStackTrace();
         }
     }
     
-    public long getResponseTime() {
+    public double getResponseTime() {
         return responseTime;
     }
 

@@ -15,7 +15,7 @@ class ClientFunc {
 
     private int numClients;
     private Thread[] clients;
-    private int responseTime;
+    private double responseTime;
 
     public ClientFunc() throws InterruptedException {
         setNumClients();
@@ -77,7 +77,7 @@ class ClientFunc {
                 clients[i].join();
                 responseTime += client.getResponseTime();
             }
-            System.out.printf("==== Total Duration: %d ms ====\n\n", responseTime);
+            System.out.printf("==== Total Duration: %f ms ====\n\n", responseTime/1000000);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
