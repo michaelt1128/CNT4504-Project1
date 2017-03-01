@@ -60,7 +60,7 @@ public class Server {
 							outputStr.append(memoryUsage());
 							break;
 						case "netstat":
-							outputStr.append(runCommand("netstat -n"));
+							outputStr.append(runCommand("netstat"));
 							break;
 						case "users":
                             outputStr.append(runCommand("who"));
