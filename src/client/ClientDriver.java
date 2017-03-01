@@ -26,7 +26,8 @@ import java.net.SocketException;
 class ClientFunc {
 
     private int numClients;
-    private Thread[] clients;
+    private Client[] clients;
+    private Thread[] threads;
     private double responseTime;
 
 
@@ -74,9 +75,10 @@ class ClientFunc {
     // Print basic menu of commands and prompt user for a command
     public int printMenu() {
         responseTime = 0;
-        System.out.printf("Enter number corresponding to the command:"
-                + "\n1.Date\n2.Uptime\n3.Memory\n4.Netstat\n5.Users\n6.Processes\n99.Change Number of Clients\n0.Exit\n");
-        Scanner input = new Scanner(System.in);
+        System.out.printf("=============================================\n|%-43s|\n| %-42s|\n| %-42s|\n| %-42s|\n| %-42s|\n| %-42s|\n| %-42s|\n| %-42s|\n| %-42s|\n============================================\n",
+		"Enter number corresponding to the command:", "1.Date", "2.Uptime", "3.Memory", "4.Netstat", "5.Users", "6.Processes", "99.Change Number of Clients", "0.Exit");
+        System.out.printf("Command: ");
+	Scanner input = new Scanner(System.in);
         int nextinput = input.nextInt();
         return nextinput;
     }
@@ -84,15 +86,17 @@ class ClientFunc {
     // Initialize threads based on user input and include response time
     public void initThreads(int numClients, String command) {
         try {
-            clients = new Thread[numClients];
+            clients = new Client[numClients];
+ 	    threads = new Thread[numClients];
             for (int i = 0; i < numClients; i++) {
-                Client client = null;
-                clients[i] = new Thread(client = new Client(command), "thread" + i);
-                clients[i].start();
-                clients[i].join();
-                responseTime += client.getResponseTime();
-            }
-            System.out.printf("==== Total Duration: %f ms ====\n\n", responseTime/1000000);
+                threads[i] = new Thread(clients[i] = new Client(command), "thread" + i);
+            }	
+	    for (int i = 0; i < numClients; i++){
+            	threads[i].start();
+                threads[i].join();
+                responseTime += clients[i].getResponseTime();
+	    }
+            System.out.printf("==== Total Duration: %.2f ms ====\n\n", responseTime/1000000);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
