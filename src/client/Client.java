@@ -3,7 +3,7 @@
 * Assignment:   Project 1
 * Members:      Liam Clarke, Kaleb LaBarrie, 
 *               William Mejia, Trang Nguyen,
-*               Michael Turner, Michael Waroff
+*               Michael Turner, Mathew Waroff
 *           
 * Description:  --Client.java--
 *               Client program is responsible for creating a serverSocket as well as printWriters and BufferedReaders in order to 
