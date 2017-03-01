@@ -1,3 +1,18 @@
+/*
+* Course:       CNT 4504
+* Assignment:   Project 1
+* Members:      Liam Clarke, Kaleb LaBarrie, 
+*               William Mejia, Trang Nguyen,
+                Michael Turner, Michael Waroff
+*           
+* Description:  --Client.java--
+*               Client program is responsible for creating a serverSocket as well as printWriters and BufferedReaders in order to 
+*               exchange data between client and server.  The client will issue commands set by the user as a request to the server,
+*               and server will respond with appropriate commands and response time.
+*               
+*/
+
+
 package client;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,6 +26,8 @@ import java.util.Date;
 public class Client extends Thread {
      StringBuilder sb = new StringBuilder();
     
+     
+    // Initialize variables 
     private Socket serverSocket;
     private PrintWriter out;
     private BufferedReader in;
@@ -42,6 +59,8 @@ public class Client extends Thread {
             // Reads and prints all lines in server response
             String serverRes;
             
+            // While server response is not empty and doesn't read "end", 
+            // append server response time on new line after each command sent by the client.
             System.out.println(this.getName());
             while ((serverRes = in.readLine()) != null) {
                 if (serverRes.equals("end")){
@@ -63,6 +82,9 @@ public class Client extends Thread {
         return responseTime;
     }
 
+     
+     // Connect method creates a new serverSocket with hostname and port# paramaters
+     // Printwriter and BufferedReader objects included to send / receive data between client and server
     public void connect() {
         try {
                 
