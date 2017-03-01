@@ -29,6 +29,7 @@ class ClientFunc {
     private Thread[] clients;
     private double responseTime;
 
+
     public ClientFunc() throws InterruptedException {
         setNumClients();
         // 

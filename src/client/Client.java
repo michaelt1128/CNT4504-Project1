@@ -31,24 +31,19 @@ public class Client extends Thread {
     private Socket serverSocket;
     private PrintWriter out;
     private BufferedReader in;
-    private BufferedReader stdIn;
     public String serverResponse;
     public boolean connected;
-    private String hostName = "192.168.100.103";
+    private String hostName = "192.168.100.104";
     private int portNumber = 5012;
     private String command;
-    private double responseTime;
+    public double responseTime;
 
     public Client(){
     }
     public Client(String command){
         this.command = command;
     }
-    /*public Client(String hostname, int port) {
-        hostName = hostname;
-        portNumber = port;
-        //connect();
-    }*/
+    
     
     @Override
     public void run(){
@@ -65,15 +60,19 @@ public class Client extends Thread {
             while ((serverRes = in.readLine()) != null) {
                 if (serverRes.equals("end")){
                 	responseTime = (double)System.nanoTime() - start;
+
+                    serverSocket.close();
+                    in.close();
+                    out.close();
                     break;
                 } else {
                     sb.append(serverRes + "\n");
                 }
                 
             }
-	System.out.printf("Run Time: %f", responseTime);
-            //System.out.printf(sb.toString());
-        }catch(Exception ex){
+	        System.out.printf("Run Time: %f \n", responseTime/1000000);
+    
+        } catch(Exception ex) {
             ex.printStackTrace();
         }
     }

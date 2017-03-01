@@ -12,7 +12,7 @@ public class Server {
 
 		System.out.println("Starting server");
 		Date startTime = new Date();
-		System.out.println(startTime.getTime());
+
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		SimpleDateFormat timeDifFormat = new SimpleDateFormat("mm:ss;SSS");
 		boolean connect = true;
@@ -29,10 +29,11 @@ public class Server {
 					// Receives from socket
 					BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 			) {
-				System.out.println("connected to client");
 				String inputLine;
 				while ((inputLine = in.readLine()) != null) {
-					
+
+					System.out.println("Received: " + inputLine);
+
 					StringBuilder outputStr = new StringBuilder("Received string: " + inputLine + "\n");
 
 					switch (inputLine) {
@@ -65,7 +66,10 @@ public class Server {
 					}
 					// appends 'end' to mark end of transmission
 					out.println(outputStr.append("\nend").toString());
+
 					clientSocket.close();
+					out.close();
+					in.close();
 					break;
 				}
 			} catch (IOException e) {
@@ -86,12 +90,11 @@ public class Server {
 
 			BufferedReader input = new BufferedReader(new InputStreamReader(pr.getInputStream()));
 			while ((line = input.readLine()) != null) {
-				System.out.println(line);
 				cmdOutput += line + "\n";
 			}
-			System.out.print(cmdOutput);
 			
 			input.close();
+			pr.destroy();
 			return cmdOutput;
 		} catch (Exception err) {
 			err.printStackTrace();
