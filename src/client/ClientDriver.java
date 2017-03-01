@@ -1,3 +1,18 @@
+/*
+* Course:       CNT 4504
+* Assignment:   Project 1
+* Members:      Liam Clarke, Kaleb LaBarrie, 
+*               William Mejia, Trang Nguyen,
+                Michael Turner, Michael Waroff
+*           
+* Description:  --Client Driver--
+*               This Program is responsible for displaying Client functions as a menu item and taking user input commands.
+*               Also initiliazes threads based on user input and measures response time for each thread.
+*/
+
+
+
+
 package client;
 
 import java.io.*;
@@ -19,7 +34,7 @@ class ClientFunc {
 
     public ClientFunc() throws InterruptedException {
         setNumClients();
-
+        // 
         while (true) {
             switch (printMenu()) {
                 case 1:
@@ -52,12 +67,14 @@ class ClientFunc {
 
     }
 
+    // Prompt user for number of clients and store in numClients var.
     public void setNumClients(){
         Scanner input = new Scanner(System.in);
         System.out.println("How many clients do you want to run?");
         numClients = input.nextInt();
     }
 
+    // Print basic menu of commands and prompt user for a command
     public int printMenu() {
         responseTime = 0;
         System.out.printf("Enter number corresponding to the command:"
@@ -67,6 +84,7 @@ class ClientFunc {
         return nextinput;
     }
 
+    // Initialize threads based on user input and include response time
     public void initThreads(int numClients, String command) {
         try {
             clients = new Thread[numClients];
