@@ -3,7 +3,7 @@
 * Assignment:   Project 1
 * Members:      Liam Clarke, Kaleb LaBarrie, 
 *               William Mejia, Trang Nguyen,
-*               Michael Turner, Michael Waroff
+*               Michael Turner, Mathew Waroff
 *           
 * Description:  --Client Driver--
 *               This Program is responsible for displaying Client functions as a menu item and taking user input commands.
