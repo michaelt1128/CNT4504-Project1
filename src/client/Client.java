@@ -3,7 +3,7 @@
 * Assignment:   Project 1
 * Members:      Liam Clarke, Kaleb LaBarrie, 
 *               William Mejia, Trang Nguyen,
-                Michael Turner, Michael Waroff
+*               Michael Turner, Michael Waroff
 *           
 * Description:  --Client.java--
 *               Client program is responsible for creating a serverSocket as well as printWriters and BufferedReaders in order to 
@@ -14,6 +14,7 @@
 
 
 package client;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -24,9 +25,7 @@ import java.lang.StringBuilder;
 import java.util.Date;
 
 public class Client extends Thread {
-     StringBuilder sb = new StringBuilder();
     
-     
     // Initialize variables 
     private Socket serverSocket;
     private PrintWriter out;
@@ -36,7 +35,7 @@ public class Client extends Thread {
     private String hostName = "192.168.100.104";
     private int portNumber = 5012;
     private String command;
-    public double responseTime;
+    private double responseTime;
 
     public Client(){
     }
@@ -47,6 +46,7 @@ public class Client extends Thread {
     
     @Override
     public void run(){
+        StringBuilder sb = new StringBuilder();
         try{
             connect();
             double start = (double)System.nanoTime();
@@ -86,13 +86,11 @@ public class Client extends Thread {
      // Printwriter and BufferedReader objects included to send / receive data between client and server
     public void connect() {
         try {
-                
                 serverSocket = new Socket(hostName, portNumber);
                 // out : message sent to server
                 out = new PrintWriter(serverSocket.getOutputStream(), true);
                 //in : message received from server
                 in = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
-                //stdIn : user's message typed in console
                 
                 connected = true;
         }

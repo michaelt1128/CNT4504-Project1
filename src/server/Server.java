@@ -1,3 +1,15 @@
+/*
+* Course:       CNT 4504
+* Assignment:   Project 1
+* Members:      Liam Clarke, Kaleb LaBarrie, 
+*               William Mejia, Trang Nguyen,
+*               Michael Turner, Michael Waroff
+*           
+* Description:  --Server--
+*               This class is responsible for sending information to the clients through a serverSocket
+*/
+
+
 package server;
 
 import java.net.*;

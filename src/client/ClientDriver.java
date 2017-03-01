@@ -3,7 +3,7 @@
 * Assignment:   Project 1
 * Members:      Liam Clarke, Kaleb LaBarrie, 
 *               William Mejia, Trang Nguyen,
-                Michael Turner, Michael Waroff
+*               Michael Turner, Michael Waroff
 *           
 * Description:  --Client Driver--
 *               This Program is responsible for displaying Client functions as a menu item and taking user input commands.
@@ -31,8 +31,9 @@ class ClientFunc {
 
 
     public ClientFunc() throws InterruptedException {
+
         setNumClients();
-        // 
+
         while (true) {
             switch (printMenu()) {
                 case 1:
@@ -59,10 +60,8 @@ class ClientFunc {
                 case 0:
                     System.out.println("Exiting Environment...");
                     System.exit(0);
-                    
             }
         }
-
     }
 
     // Prompt user for number of clients and store in numClients var.
