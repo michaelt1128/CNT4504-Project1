@@ -88,14 +88,12 @@ class ClientFunc {
         try {
             clients = new Client[numClients];
  	    threads = new Thread[numClients];
+            new Thread(new Client(command, 0), "Thread").start();
+            /*
             for (int i = 0; i < numClients; i++) {
-                threads[i] = new Thread(clients[i] = new Client(command), "thread" + i);
-            }	
-	    for (int i = 0; i < numClients; i++){
-            	threads[i].start();
-                threads[i].join();
-                responseTime += clients[i].getResponseTime();
-	    }
+                threads[i] = new Thread(clients[i] = new Client(command, i), "thread" + i);
+                threads[i].start();
+            }	*/
             System.out.printf("==== Total Duration: %.2f ms ====\n\n", responseTime/1000000);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -108,6 +106,7 @@ public class ClientDriver {
     public static void main(String[] args) {
 
         try {
+            
             ClientFunc cf = new ClientFunc();
             cf.printMenu();
 

@@ -32,15 +32,17 @@ public class Client extends Thread {
     private BufferedReader in;
     public String serverResponse;
     public boolean connected;
-    private String hostName = "192.168.100.104";
-    private int portNumber = 5012;
+    private String hostName = "127.0.0.1";
+    private int portNumber = 10000;
     private String command;
     private double responseTime;
 
     public Client(){
     }
-    public Client(String command){
+    public Client(String command, int count){
         this.command = command;
+        portNumber += count;
+        System.out.println(portNumber);
     }
     
     
@@ -86,12 +88,14 @@ public class Client extends Thread {
      // Printwriter and BufferedReader objects included to send / receive data between client and server
     public void connect() {
         try {
-                serverSocket = new Socket(hostName, portNumber);
+                Socket testSocket = new Socket(hostName, 11000);
+                /*serverSocket = new Socket(hostName, portNumber);
                 // out : message sent to server
                 out = new PrintWriter(serverSocket.getOutputStream(), true);
                 //in : message received from server
                 in = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
-                
+                */
+                System.out.println(testSocket.toString());
                 connected = true;
         }
         catch (UnknownHostException e) {
