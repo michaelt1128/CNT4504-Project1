@@ -18,34 +18,30 @@ import java.text.NumberFormat;
 import java.lang.StringBuilder;
 import java.util.ArrayList;
 
+
+//Receiving Server
 public class Server {
-
+    private static int PORT = 10000;
+    
     public static void main(String[] args) throws IOException {
-
         System.out.println("Starting server");
-        int threadc = 0;
-        boolean connect = true;
-        ArrayList<Thread> serverThreads = new ArrayList<Thread>();
-        ServerSocket testSocket = new ServerSocket(11000);
-        while (connect) {
-            System.out.println("trying to connect");
-            int portNumber = 10000;
-            try {
-                // Creates socket
-                ServerSocket serverSocket = new ServerSocket(portNumber + threadc);
-                Socket clientSocket = serverSocket.accept();
+        try {
+            
+            while (true) {
+                System.out.println("trying to connect");
+                ServerSocket serverSocket = new ServerSocket(PORT);
                 System.out.println("Connected");
-                serverThreads.add(new Thread(new ServerThread(clientSocket), "Server Thread"));
-                serverThreads.get(threadc).start();
-                threadc++;
-            } catch (IOException e) {
-                System.out.println("Exception caught when trying to listen on port " + portNumber
-                        + " or listening for a connection");
-                System.out.println(e.getMessage());
+                new Thread(new ServerThread(serverSocket.accept()), "Server Thread").start();
             }
-
+        } catch (IOException e) {
+            System.out.println("Exception caught when trying to listen on port " + PORT
+                    + " or listening for a connection");
+            System.out.println(e.getMessage());
         }
+
     }
+    
+
 
 }
 
@@ -55,12 +51,13 @@ class ServerThread implements Runnable {
     private PrintWriter out;
     private BufferedReader in;
 
-    public ServerThread(Socket sock) throws IOException {
-        socket = sock;
+    public ServerThread(Socket s) throws IOException {
+        socket = s;
         // Prints to socket
         out = new PrintWriter(socket.getOutputStream(), true);
         // Receives from socket
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
     }
     private Date startTime = new Date();
 
@@ -70,11 +67,8 @@ class ServerThread implements Runnable {
     @Override
     public void run() {
         try{
-        String inputLine;
-        while ((inputLine = in.readLine()) != null) {
-
+            String inputLine = in.readLine();
             System.out.println("Received: " + inputLine);
-
             StringBuilder outputStr = new StringBuilder("Received string: " + inputLine + "\n");
 
             switch (inputLine) {
@@ -111,8 +105,7 @@ class ServerThread implements Runnable {
             socket.close();
             out.close();
             in.close();
-            break;
-        }
+        
         }catch(Exception ex){
             ex.toString();
         }
