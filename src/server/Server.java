@@ -1,10 +1,10 @@
 /*
 * Course:       CNT 4504
 * Assignment:   Project 1
-* Members:      Liam Clarke, Kaleb LaBarrie, 
+* Members:      Liam Clarke, Kaleb LaBarrie,
 *               William Mejia, Trang Nguyen,
 *               Michael Turner, Mathew Waroff
-*           
+*
 * Description:  --Server--
 *               This class is responsible for sending information to the clients through a serverSocket
  */
@@ -21,28 +21,23 @@ import java.util.ArrayList;
 
 //Receiving Server
 public class Server {
-    private static int PORT = 10000;
-    
+    private static int PORT = 5013;
+
     public static void main(String[] args) throws IOException {
         System.out.println("Starting server");
         try {
-            
+            ServerSocket serverSocket = new ServerSocket(PORT);
             while (true) {
-                System.out.println("trying to connect");
-                ServerSocket serverSocket = new ServerSocket(PORT);
-                System.out.println("Connected");
-                new Thread(new ServerThread(serverSocket.accept()), "Server Thread").start();
+                System.out.println("Trying to connect to new client");
+                new ServerThread(serverSocket.accept());
+                System.out.println("Connected to client");
             }
         } catch (IOException e) {
             System.out.println("Exception caught when trying to listen on port " + PORT
-                    + " or listening for a connection");
+                               + " or listening for a connection");
             System.out.println(e.getMessage());
         }
-
     }
-    
-
-
 }
 
 class ServerThread implements Runnable {
@@ -58,6 +53,8 @@ class ServerThread implements Runnable {
         // Receives from socket
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
+        new Thread(this).start();
+
     }
     private Date startTime = new Date();
 
@@ -66,38 +63,37 @@ class ServerThread implements Runnable {
 
     @Override
     public void run() {
-        try{
+        try {
             String inputLine = in.readLine();
             System.out.println("Received: " + inputLine);
             StringBuilder outputStr = new StringBuilder("Received string: " + inputLine + "\n");
-
             switch (inputLine) {
-                // add api cases here
-                case "date":
-                    outputStr.append(dateFormat.format(new Date()));
-                    break;
-                case "uptime":
-                    outputStr.append(timeDifFormat.format(new Date().getTime() - startTime.getTime()) + " uptime");
-                    break;
-                case "memory":
-                    outputStr.append(memoryUsage());
-                    break;
-                case "netstat":
-                    outputStr.append(runCommand("netstat"));
-                    break;
-                case "users":
-                    outputStr.append(runCommand("who"));
-                    break;
-                case "processes":
-                    outputStr.append(runCommand("ps -aux"));
-                    break;
-                case "close":
-                    socket.close();
-                    outputStr.append("Closed socket");
-                    break;
-                default:
-                    outputStr.append("Error: not a valid input");
-                    break;
+            // add api cases here
+            case "date":
+                outputStr.append(dateFormat.format(new Date()));
+                break;
+            case "uptime":
+                outputStr.append(timeDifFormat.format(new Date().getTime() - startTime.getTime()) + " uptime");
+                break;
+            case "memory":
+                outputStr.append(memoryUsage());
+                break;
+            case "netstat":
+                outputStr.append(runCommand("netstat"));
+                break;
+            case "users":
+                outputStr.append(runCommand("who"));
+                break;
+            case "processes":
+                outputStr.append(runCommand("ps -aux"));
+                break;
+            case "close":
+                socket.close();
+                outputStr.append("Closed socket");
+                break;
+            default:
+                outputStr.append("Error: not a valid input");
+                break;
             }
             // appends 'end' to mark end of transmission
             out.println(outputStr.append("\nend").toString());
@@ -105,14 +101,14 @@ class ServerThread implements Runnable {
             socket.close();
             out.close();
             in.close();
-        
-        }catch(Exception ex){
+
+        } catch (Exception ex) {
             ex.toString();
         }
-       
+
     }
-    
-    
+
+
     private static String runCommand(String command) {
         try {
             String line;
