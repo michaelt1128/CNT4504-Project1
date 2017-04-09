@@ -68,7 +68,7 @@ public class Client extends Thread {
                     sb.append(serverRes + "\n");
                 }
             }
-            //System.out.println(sb.toString());
+            System.out.println(sb.toString());
             System.out.printf("Run Time: %f \n", responseTime / 1000000);
 
         } catch (Exception ex) {
