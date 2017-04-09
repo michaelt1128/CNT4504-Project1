@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 //Receiving Server
 public class Server {
-    private static int PORT = 5013;
+    private static int PORT = 5012;
 
     public static void main(String[] args) throws IOException {
         System.out.println("Starting server");
@@ -79,7 +79,7 @@ class ServerThread implements Runnable {
                 outputStr.append(memoryUsage());
                 break;
             case "netstat":
-                outputStr.append(runCommand("netstat"));
+                outputStr.append(runCommand("netstat -n"));
                 break;
             case "users":
                 outputStr.append(runCommand("who"));
@@ -101,6 +101,7 @@ class ServerThread implements Runnable {
             socket.close();
             out.close();
             in.close();
+            System.out.println("sent response");
 
         } catch (Exception ex) {
             ex.toString();

@@ -31,9 +31,9 @@ public class Client extends Thread {
     private PrintWriter out;
     private BufferedReader in;
     public String serverResponse;
-    public boolean connected;
+    // private String hostName = "127.0.0.1";
     private String hostName = "192.168.100.104";
-    private int portNumber = 5013;
+    private int portNumber = 5012;
     private String command;
     private double responseTime;
 
@@ -68,7 +68,7 @@ public class Client extends Thread {
                     sb.append(serverRes + "\n");
                 }
             }
-            System.out.println(sb.toString());
+            //System.out.println(sb.toString());
             System.out.printf("Run Time: %f \n", responseTime / 1000000);
 
         } catch (Exception ex) {
@@ -90,8 +90,6 @@ public class Client extends Thread {
             out = new PrintWriter(serverSocket.getOutputStream(), true);
             //in : message received from server
             in = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
-
-            connected = true;
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host " + hostName);
             System.exit(1);

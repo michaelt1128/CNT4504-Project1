@@ -75,7 +75,7 @@ class ClientFunc {
 	// Print basic menu of commands and prompt user for a command
 	public int printMenu() {
 		responseTime = 0;
-		System.out.printf("=============================================\n|%-43s|\n| %-42s|\n| %-42s|\n| %-42s|\n| %-42s|\n| %-42s|\n| %-42s|\n| %-42s|\n| %-42s|\n============================================\n",
+		System.out.printf("=============================================\n|%-43s|\n| %-42s|\n| %-42s|\n| %-42s|\n| %-42s|\n| %-42s|\n| %-42s|\n| %-42s|\n| %-42s|\n=============================================\n",
 		                  "Enter number corresponding to the command:", "1.Date", "2.Uptime", "3.Memory", "4.Netstat", "5.Users", "6.Processes", "99.Change Number of Clients", "0.Exit");
 		System.out.printf("Command: ");
 		Scanner input = new Scanner(System.in);
@@ -86,6 +86,7 @@ class ClientFunc {
 	// Initialize threads based on user input and include response time
 	public void initThreads(int numClients, String command) {
 		try {
+			long start = System.nanoTime();
 			clients = new Client[numClients];
 			threads = new Thread[numClients];
 			for (int i = 0; i < numClients; i++) {
@@ -98,8 +99,10 @@ class ClientFunc {
 			for (int i = 0; i < clients.length; i++) {
 				responseTime += clients[i].getResponseTime();
 			}
-
-			System.out.printf("==== Total Duration: %.2f ms ====\n\n", responseTime / 1000000);
+			double totalRes = System.nanoTime() - start;
+			System.out.printf("==== %-25s %.2f ms ====\n", "Total Response Time: ", responseTime / 1000000);
+			System.out.printf("==== %-25s %.2f ms ====\n", "Average Response Time:", responseTime / 1000000 / numClients);
+			System.out.printf("==== %-25s %.2f ms ====\n\n", "Total Duration: ", totalRes / 1000000);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
