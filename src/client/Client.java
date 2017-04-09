@@ -32,7 +32,7 @@ public class Client extends Thread {
     private BufferedReader in;
     public String serverResponse;
     public boolean connected;
-    private String hostName = "127.0.0.1";
+    private String hostName = "192.168.100.104";
     private int portNumber = 5013;
     private String command;
     private double responseTime;
